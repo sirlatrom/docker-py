@@ -19,7 +19,7 @@ class BuildApiMixin(object):
               forcerm=False, dockerfile=None, container_limits=None,
               decode=False, buildargs=None, gzip=False, shmsize=None,
               labels=None, cache_from=None, target=None, network_mode=None,
-              squash=None, extra_hosts=None, platform=None, isolation=None):
+              squash=None, extra_hosts=None, platform=None, isolation=None, version=None):
         """
         Similar to the ``docker build`` command. Either ``path`` or ``fileobj``
         needs to be set. ``path`` can be a local path (to a directory
@@ -103,6 +103,7 @@ class BuildApiMixin(object):
             platform (str): Platform in the format ``os[/arch[/variant]]``
             isolation (str): Isolation technology used during build.
                 Default: `None`.
+            version (str): Builder version to use
 
         Returns:
             A generator for the build output.
@@ -235,6 +236,8 @@ class BuildApiMixin(object):
                     'platform was only introduced in API version 1.32'
                 )
             params['platform'] = platform
+
+        params['version'] = version
 
         if isolation is not None:
             if utils.version_lt(self._version, '1.24'):
