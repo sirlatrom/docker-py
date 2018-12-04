@@ -237,7 +237,12 @@ class BuildApiMixin(object):
                 )
             params['platform'] = platform
 
-        params['version'] = version
+        if version is not None:
+            if utils.version_lt(self._version, '1.38'):
+                raise errors.InvalidVersion(
+                    'version was only introduced in API version 1.38'
+                )
+            params['version'] = version
 
         if isolation is not None:
             if utils.version_lt(self._version, '1.24'):
